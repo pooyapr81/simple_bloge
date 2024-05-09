@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark tm-nav">
+    <div class="container-fluid">
+        <div class="navbar-nav">
+            <!--            <a class="navbar-brand" acyive href="{% url 'home:home'%}">HOME</a>-->
+            {% if request.user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">LOGOUT USER <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:profile' request.user.id %}">PROFILE USER</a>
+                </li>
+            </ul>
+            <!--            <a class="navbar-brand nav-item" href="{% url 'accounts:logout' %}">LOGOUT USER</a>-->
+            <!--            <a class="navbar-brand" href="{% url 'accounts:profile' request.user.id %}">PROFILE USER</a>-->
+            {% else %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'accounts:register' %}">REGISTER USER <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'accounts:login' %}">LOGIN USER</a>
+                </li>
+            </ul>
+<!--            <a class="navbar-brand" href="{% url 'accounts:register' %}">REGISTER USER</a>-->
+<!--            <a class="navbar-brand" href="{% url 'accounts:login' %}">LOGIN USER</a>-->
+            {% endif %}
+        </div>
+    </div>
+</nav>

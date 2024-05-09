@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!--    <p class="card">-->
+<!--        <a href="{% url 'accounts:profile' post.use.id %}">{{ post.use.username }}</a>  {{post.updated|timesince}}-->
+<!--    </p>-->
+<!--    <p class="card">-->
+<!--        {{ post.body }}-->
+<!--    </p><hr>-->
+<!--    {% if post.image %}-->
+<!--    <img src="{{ post.image.url }}">-->
+<!--    {% endif %}-->
+<!--    <br>-->
+<!--    {% if request.user.is_authenticated %}-->
+<!--        <a href="{% url 'home:postlike' post.id %}" class="btn btn-info">LIKE {{post.likes_count}}</a>-->
+<!--        <form action="" method="post">-->
+<!--            {% csrf_token %}-->
+<!--            {{form.as_p}}-->
+<!--            <input type="submit" value="send">-->
+<!--        </form>-->
+<!--    {% else %}-->
+<!--        <p class="alert alert-danger">only user can send comment</p>-->
+<!--    {% endif %}-->
+
+<!--    {% for comment in comments %}-->
+<!--        <div class="card bg-dark text-white" style="margin: 0 0 3px">-->
+<!--            <p class="card_header" >{{comment.user}} | {{comment.created|timesince}}</p>-->
+<!--            <p class="card_body">{{comment.body}} </p>-->
+
+<!--            {% if request.user.is_authenticated %}-->
+<!--                <form action="{% url 'home:addreply' post.id comment.id %}" method="post">-->
+<!--                    {% csrf_token %}-->
+<!--                    {{ reply_form.as_p }}-->
+<!--                    <input type="submit" value="send">-->
+<!--                </form>-->
+<!--            {% endif %}-->
+
+
+<!--            {% with replies=comment.reply_comment.all %}-->
+<!--                {% for reply in replies %}-->
+<!--                    <p class="br-info p-2 m-2">{{reply.user}} | {{comment.created|timesince}}<br> {{reply.body}}</p>-->
+<!--                {% endfor %}-->
+<!--            {% endwith %}-->
+<!--        </div>-->
+
+<!--    {% empty %}-->
+<!--        <p class="card bg-dark text-white card_header" style="margin: 0 0 3px">no comments exist</p>-->
+<!--    {% endfor %}-->
+<!--    {% if request.user.id == post.use.id%}-->
+<!--    <a href="{% url 'home:postdelete' post.id %}" class="btn btn-danger">DELETE</a>-->
+<!--    <a href="{% url 'home:postupdate' post.id %}" class="btn btn-info">Update</a>-->
+<!--    {% endif %}-->
+
+
+<!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+
+        <!-- Begin Post -->
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+            <div class="mainheading">
+
+                <!-- Begin Top Meta -->
+                <div class="row post-top-meta">
+                    <div class="col-md-2">
+                        <a href="{% url 'accounts:profile' request.user.id %}"><img class="author-thumb"
+                                                                                    src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+                                                                                    alt="Sal"></a>
+                    </div>
+                    <div class="col-md-10">
+                        <a class="link-dark" href="{% url 'accounts:profile' post.use.id %}">{{ post.use.username }}</a>
+                        <span class="post-date">{{post.created|timesince}}</span><span class="dot"></span>
+                    </div>
+                </div>
+                <!-- End Top Menta -->
+
+                <h1 class="posttitle">{{post.slug}}</h1>
+
+                {% if request.user.id == post.use.id%}
+                <a href="{% url 'home:postdelete' post.id %}" class="btn btn-danger">DELETE</a>
+                <a href="{% url 'home:postupdate' post.id %}" class="btn btn-info">Update</a>
+                {% endif %}
+
+            </div>
+
+            <!-- Begin Featured Image -->
+            {% if post.image %}
+            <img class="featured-image img-fluid" src="{{ post.image.url }}" alt="">
+            {% endif %}
+            <!-- End Featured Image -->
+
+            <!-- Begin Post Content -->
+            <div class="article-post">
+                <p class="card">
+                    {{ post.body }}
+                </p>
+            </div>
+            <!-- End Post Content -->
+
+            <!-- Begin like-->
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'home:postlike' post.id %}" class="btn btn-info">LIKE {{post.likes_count}}</a>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="send">
+            </form>
+            {% else %}
+            <p class="alert alert-danger">only user can send comment</p>
+            {% endif %}
+            <!-- End like -->
+
+        </div>
+        <!-- Begin Comment -->
+        {% for comment in comments %}
+        <div class="card bg-dark text-white" style="margin: 0 0 3px">
+            <p class="card_header">{{comment.user}} | {{comment.created|timesince}}</p>
+            <p class="card_body">{{comment.body}} </p>
+
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'home:addreply' post.id comment.id %}" method="post">
+                {% csrf_token %}
+                {{ reply_form.as_p }}
+                <input type="submit" value="send">
+            </form>
+            {% endif %}
+
+
+            {% with replies=comment.reply_comment.all %}
+            {% for reply in replies %}
+            <p class="br-info p-2 m-2">{{reply.user}} | {{comment.created|timesince}}<br> {{reply.body}}</p>
+            {% endfor %}
+            {% endwith %}
+        </div>
+        <!-- End Comment -->
+        <!-- Begin Delete and Update -->
+        {% empty %}
+        <p class="card bg-dark text-white card_header" style="margin: 0 0 3px">no comments exist</p>
+        {% endfor %}
+
+        <!-- End Delete and Update -->
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<div class="hideshare"></div>
+
+<!-- Begin Related
+================================================== -->
+<div class="graybg">
+    <div class="container">
+        <div class="row listrecent listrelated">
+
+            <!-- begin post -->
+            <div class="col-md-4">
+                <div class="card">
+                    <a href="post.html">
+                        <img class="img-fluid img-thumb" src="{% static 'assets/img/demopic/9.jpg' %}" alt="">
+                    </a>
+                    <div class="card-block">
+                        <h2 class="card-title"><a href="post.html">Best recreational places to visit on a holiday</a>
+                        </h2>
+                        <div class="metafooter">
+                            <div class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<a href="author.html"><img class="author-thumb"
+                                                           src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+                                                           alt="Sal"></a>
+								</span>
+                                <span class="author-meta">
+								<span class="post-name"><a href="author.html">Sal</a></span><br/>
+								<span class="post-date">22 July 2017</span><span class="dot"></span><span
+                                        class="post-read">6 min read</span>
+								</span>
+                                <span class="post-read-more"><a href="post.html" title="Read Story"><svg
+                                        class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path
+                                        d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z"
+                                        fill-rule="evenodd"></path></svg></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end post -->
+
+            <!-- begin post -->
+            <div class="col-md-4">
+                <div class="card">
+                    <a href="post.html">
+                        <img class="img-fluid img-thumb" src="{% static 'assets/img/demopic/8.jpg' %}" alt="">
+                    </a>
+                    <div class="card-block">
+                        <h2 class="card-title"><a href="post.html">How travelling can change your life</a></h2>
+                        <div class="metafooter">
+                            <div class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<a href="author.html"><img class="author-thumb"
+                                                           src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+                                                           alt="Sal"></a>
+								</span>
+                                <span class="author-meta">
+								<span class="post-name"><a href="author.html">Sal</a></span><br/>
+								<span class="post-date">22 July 2017</span><span class="dot"></span><span
+                                        class="post-read">6 min read</span>
+								</span>
+                                <span class="post-read-more"><a href="post.html" title="Read Story"><svg
+                                        class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path
+                                        d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z"
+                                        fill-rule="evenodd"></path></svg></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end post -->
+
+            <!-- begin post -->
+            <div class="col-md-4">
+                <div class="card">
+                    <a href="post.html">
+                        <img class="img-fluid img-thumb" src="{% static 'assets/img/demopic/7.jpg' %}" alt="">
+                    </a>
+                    <div class="card-block">
+                        <h2 class="card-title"><a href="post.html">Little red dress and a perfect summer</a></h2>
+                        <div class="metafooter">
+                            <div class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<a href="author.html"><img class="author-thumb"
+                                                           src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+                                                           alt="Sal"></a>
+								</span>
+                                <span class="author-meta">
+								<span class="post-name"><a href="author.html">Sal</a></span><br/>
+								<span class="post-date">22 July 2017</span><span class="dot"></span><span
+                                        class="post-read">6 min read</span>
+								</span>
+                                <span class="post-read-more"><a href="post.html" title="Read Story"><svg
+                                        class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path
+                                        d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z"
+                                        fill-rule="evenodd"></path></svg></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end post -->
+
+        </div>
+    </div>
+</div>
+<!-- End Related Posts
+================================================== -->
+
+<!-- Begin Twitter Timeline
+================================================== -->
+<div class="container margtop3rem">
+    <a class="twitter-grid" href="https://twitter.com/TwitterDev/timelines/539487832448843776">WowThemesNet Tweets</a>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+<!-- End Twitter Timeline
+================================================== -->
+
+<!-- Begin AlertBar
+================================================== -->
+<div class="alertbar">
+    <div class="container text-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt=""> &nbsp; Never miss a <b>story</b> from us, get weekly
+        updates in your inbox. <a href="#" class="btn subscribe">Get Updates</a>
+    </div>
+</div>
+<!-- End AlertBar
+================================================== -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="{% static 'assets/js/jquery.min.js' %}"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"-->
+<!--        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"-->
+<!--        crossorigin="anonymous"></script>-->
+<!--<script src="{% static 'assets/js/bootstrap.min.js' %}"></script>-->
+<!--<script src="{% static 'assets/js/ie10-viewport-bug-workaround.js' %}"></script>-->
+<!--<script src="{% static 'assets/js/mediumish.js' %}"></script>-->
+{% endblock %}

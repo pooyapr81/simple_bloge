@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+test
+    <form action="" method="get" style="display: flex; align-items: center;">
+        <div style="margin-right: 10px;">
+            {{ form.search }}
+        </div>
+        <input type="submit" value="SEARCH">
+    </form>
+
+    {% if request.user.is_authenticated %}
+        <h2>hello {{request.user}}</h2>
+
+    {% else %}
+        <h2>this is home page</h2>
+    {% endif %}
+    <div class="card">
+            {% for post in posts %}
+                 <a class="card-body" href="{% url 'home:postdetail' post.id post.slug %}">{{ post.body|truncatewords:5 }}</a>
+            {% endfor %}
+        </div>
+{% endblock %}
